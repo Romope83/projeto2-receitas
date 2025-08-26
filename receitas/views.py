@@ -1,17 +1,28 @@
-from django.shortcuts import render
-from django.http import Http404
+from django.shortcuts import render, get_object_or_404
+from .models import Receita
 
-# receitas/views.py
+
 def home(request):
-    return render(request,'receitas/home.html')
+    receitas = Receita.objects.all()
+    return render(request, 'receitas/home.html', {'receitas': receitas})
 
 def receita_detail(request, id):
-    # Cria o dicionário de contexto com os dados da receita
-    context = {
-        'receita_id': id,
-        'receita_title': f'Receita Detalhada ({id})',
-        'receita_description': f'Esta é a descrição detalhada da receita com ID ({id})'
+    receita = get_object_or_404(Receita, pk = id)
+    context={
+        'receita': receita,
     }
-
-    # Renderiza o template 'receita_detail.html' e passa o contexto para ele
     return render(request, 'receitas/receita_detail.html', context)
+
+def pesquisar_receitas(request):
+    query = request.GET.get('q') # pega o que foi digitado no campo de busca
+    resultados = []
+
+    if query:
+        # filtrar receitas que contenham o termo no nome (sem case-sensitive)
+        resultados = Receita.objects.filter(title__icontains=query)
+
+    context = {
+        'query': query,
+        'resultados': resultados,
+    }
+    return render(request, 'receitas/pesquisa.html', context)
