@@ -1,56 +1,70 @@
-{%load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minhas Receitas</title>
-    <script src="https://cdn.tailwindcss.com"></script><!-- Esta tag serve para importar o Tailwind CSS na sua página -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
-    <style>
-        body{
-            font-family: 'Inter', sans-serif;
-        }
-    </style>
-</head>
- <body class="bg-gray-100 text-gray-900"> 
-    <header class="bg-gray-900 text-white p-6 shadow-lg rounded-b-lg">
-        <div class="containser mx-auto flex flex-col sm:flex-row items-center justify-center">
-            <div class="flex items-cener mb-4 sm:mb-0">
-                <div class="text-4xl mr-4">
-                    <i class="fas fa-utensils"></i>
-                </div>
-                <h1 class="text-4xl font-bold text-center sm:text-left">
-                    Minhas Receitas Deliciosas
-                </h1>
-            </div>
-            <nav class="mt-4 sm:mt-0"></nav>
-        </div>
-    </header>
-    <!-- Conteúdo principal da página -->
-    <section class="container mx-auto mt-8 p-4 flex justify-center">
-        <form method="get" action="{% url 'pesquisar_receitas' %}" class="w-full max-w-lg flex bg-white rounded-full shadow-md overflow-hidden">
-            <input type="text" name="q" placeholder="pesquisar receitas... " class="flex-grow p-3 text-gray-700 focus:ring-2 focus-ring-orange-500 rounded-l-full pl-5">
-            <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white p-4 px-6 rounded-r-full transition duration-300 ease-in-out flex items-center justify-center">
-                <i class="fas fa-search mr-2"></i> Pesquisar
-            </button>
-        </form>
-    </section>
-   <main class="container mx-auto p-6 mt-8 bg-white rounded-lg shadow-md">
-    <h2 class="text-2xl font-semibold mb-4 text-center">Nossas últimas receitas</h2>
-    <div class="flex flex-wrap justify-center gap-6">
-        {% for receita in receitas %}
-        <div class="w-full sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1.5rem)] bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out">
-            <img src="/{{ receita.image }}" alt="[Imagem de {{ receita.title }}]" class="w-full h-48 object-cover rounded-md mb-4">
-            <h3 class="text-xl font-bold mb-2 text-gray-800">{{ receita.title }}</h3>
-            <p class="text-gray-600 mb-4">{{ receita.description }}</p>
-            <a href="{% url 'receita_detail' id=receita.id %}" class="text-orange-600 hover:text-orange-800 font-semibold">Ver Receita &rarr;</a>
-        </div>
-        {% endfor %}
+{% extends "receitas/base.html" %} {% block title %} Romope83 - Minhas Receitas
+Deliciosas{%endblock %} {% block content %}
+<section class="container mx-auto mt-8 p-4 flex justify-center">
+  <form
+    method="get"
+    action="{% url 'pesquisar_receitas' %}"
+    class="w-full max-w-lg flex bg-white rounded-full shadow-md overflow-hidden"
+  >
+    <input
+      type="text"
+      name="q"
+      placeholder="pesquisar receitas... "
+      class="flex-grow p-3 text-gray-700 focus:ring-2 focus-ring-orange-500 rounded-l-full pl-5"
+    />
+    <button
+      type="submit"
+      class="bg-orange-500 hover:bg-orange-600 text-white p-4 px-6 rounded-r-full transition duration-300 ease-in-out flex items-center justify-center"
+    >
+      <i class="fas fa-search mr-2"></i> Pesquisar
+    </button>
+  </form>
+</section>
+<nav class="relative justify-center my-4 z-10 flex space-x-4">
+  <a
+    href="{%url 'home'%}"
+    class="mx-2 px-4 py-2 rounded-full font-semibold {% if not categoria_selecionada %}bg-orange-500 hover:bg-orange-600 text-white{% else %}bg-gray-300 hover:bg-gray-500 text-black{% endif %}"
+    >Todas</a
+  >
+  <a
+    href="{%url 'home'%}?categoria=comida"
+    class="mx-2 px-4 py-2 rounded-full font-semibold {% if categoria_selecionada == 'comida' %}bg-orange-500 hover:bg-orange-600 text-white{% else %}bg-gray-300 hover:bg-gray-500 text-black{% endif %}"
+    >Comida</a
+  >
+  <a
+    href="{%url 'home'%}?categoria=sobremesa"
+    class="mx-2 px-4 py-2 rounded-full font-semibold {% if categoria_selecionada == 'sobremesa' %}bg-orange-500 hover:bg-orange-600 text-white{% else %}bg-gray-300 hover:bg-gray-500 text-black{% endif %}"
+    >Sobremesa</a
+  >
+  <a
+    href="{%url 'home'%}?categoria=drink"
+    class="mx-2 px-4 py-2 rounded-full font-semibold {% if categoria_selecionada == 'drink' %}bg-orange-500 hover:bg-orange-600 text-white{% else %}bg-gray-300 hover:bg-gray-500 text-black{% endif %}"
+    >Drink</a
+  >
+</nav>
+<main class="container mx-auto p-6 mt-8 bg-white rounded-lg shadow-md">
+  <h2 class="text-2xl font-semibold mb-4 text-center">
+    Nossas últimas receitas
+  </h2>
+  <div class="flex flex-wrap justify-center gap-6">
+    {% for receita in receitas %}
+    <div
+      class="w-full sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1.5rem)] bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out"
+    >
+      <img
+        src="{{ receita.image.url }}"
+        alt="[Imagem de {{ receita.title }}]"
+        class="w-full h-48 object-cover rounded-md mb-4"
+      />
+      <h3 class="text-xl font-bold mb-2 text-gray-800">{{ receita.title }}</h3>
+      <p class="text-gray-600 mb-4">{{ receita.description }}</p>
+      <a
+        href="{% url 'receita_detail' id=receita.id %}"
+        class="text-orange-600 hover:text-orange-800 font-semibold"
+        >Ver Receita &rarr;</a
+      >
     </div>
+    {% endfor %}
+  </div>
 </main>
-    <footer class="mt-12 p-6 text-center text-gray-600">
-        <p>&copy; 2025 Minhas Receitas - Ronaldo INC.</p>
-    </footer>
-</body>
-</html>
+{%endblock %}
