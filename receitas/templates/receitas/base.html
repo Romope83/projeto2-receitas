@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Romope - Receitas{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Esta tag serve para importar o Tailwind CSS na sua página -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
@@ -23,6 +22,39 @@
     </style>
   </head>
   <body>
+    <header class="bg-gray-900 text-white p-6 shadow-lg rounded-b-lg">
+      <div
+        class="container mx-auto relative flex flex-col sm:flex-row items-center justify-center"
+      >
+        <div class="flex items-center">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="text-4xl mr-4">
+              <i class="fas fa-utensils"></i>
+            </div>
+            <h1 class="text-4xl font-bold text-center sm:text-left">
+              Minhas Receitas Deliciosas
+            </h1>
+          </div>
+        </div>
+        <nav class="mr-auto relative z-10 flex space-x-4">
+          <i class="fas fa-home"
+            ><a
+              href="{%url 'home'%}"
+              class="text-gray-300 hover:text-white mx-2"
+              >Home</a
+            ></i
+          >
+        </nav>
+        <nav class="ml-auto relative z-10 flex space-x-4">
+          <a href="{%url 'sobre_nos'%}" class="text-gray-300 hover:text-white"
+            >Sobre Nós</a
+          >
+          <a href="{%url 'contato'%}" class="text-gray-300 hover:text-white"
+            >Contato</a
+          >
+        </nav>
+      </div>
+    </header>
     {% block content %} {% endblock %}
     <footer class="mt-12 p-6 text-center text-gray-600">
       <p>&copy; 2025 Minhas Receitas - Ronaldo INC.</p>

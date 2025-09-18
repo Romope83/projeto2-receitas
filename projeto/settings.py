@@ -130,3 +130,6 @@ import os
 
 MEDIA_URL = '/media/'
 media_root = os.path.join(BASE_DIR, 'media')
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = BASE_DIR/'emails'
